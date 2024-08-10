@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="TabLayoutDotStyle">
+        <item name="tabIndicatorHeight">0dp</item>
+        <item name="tabIndicatorColor">@color/transparent</item>
+        <item name="tabTextColor">@color/transparent</item>
+    </style>
+
+    <style name="TabLayoutDots">
+        <item name="tabBackground">@drawable/tab_bg_dot</item>
+        <item name="tabGravity">center</item>
+        <item name="tabMode">fixed</item>
+    </style>
+
+
+</resources>
