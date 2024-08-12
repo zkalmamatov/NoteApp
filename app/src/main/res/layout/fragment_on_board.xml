@@ -43,14 +43,10 @@
         android:id="@+id/tab_layout"
         style="@style/TabLayoutDots"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="272dp"
-        app:tabGravity="center"
-        app:tabPaddingEnd="6dp"
-        android:paddingEnd="6dp"
-        app:tabIndicatorHeight="4dp"
-        app:tabMode="fixed" />
+        android:layout_height="24dp"
+        android:layout_gravity="bottom|center"
+        android:layout_marginBottom="88dp"
+        android:background="@color/transparent" />
 
 
 </FrameLayout>

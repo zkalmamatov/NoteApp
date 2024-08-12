@@ -42,6 +42,7 @@ class OnBoardFragment : Fragment() {
         TabLayoutMediator(binding.tabLayout, binding.viewpager2) { tab, position ->
 
         }.attach()
+
     }
 
     private fun setupListeners() = with(binding.viewpager2) {
