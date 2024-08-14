@@ -12,7 +12,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-
     <TextView
         android:id="@+id/txt_skip"
         android:layout_width="wrap_content"
@@ -26,7 +25,6 @@
         android:textColor="@color/orange"
         android:textSize="16sp"
         android:textStyle="bold" />
-
 
     <TextView
         android:id="@+id/txt_start"
@@ -47,6 +45,5 @@
         android:layout_gravity="bottom|center"
         android:layout_marginBottom="88dp"
         android:background="@color/transparent" />
-
 
 </FrameLayout>

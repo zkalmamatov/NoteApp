@@ -15,4 +15,9 @@
         android:name="kg.example.noteapp.ui.fragments.onboard.OnBoardPagingFragment"
         android:label="fragment_on_board_paging"
         tools:layout="@layout/fragment_on_board_paging" />
+    <fragment
+        android:id="@+id/noteFragment"
+        android:name="kg.example.noteapp.ui.fragments.note.NoteFragment"
+        android:label="fragment_note"
+        tools:layout="@layout/fragment_note" />
 </navigation>

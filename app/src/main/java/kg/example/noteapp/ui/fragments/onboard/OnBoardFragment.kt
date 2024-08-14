@@ -15,6 +15,8 @@ import com.google.android.material.tabs.TabLayoutMediator
 import kg.example.noteapp.R
 import kg.example.noteapp.databinding.FragmentOnBoardBinding
 import kg.example.noteapp.ui.adapter.onBoardAdapter
+import kg.example.noteapp.ui.fragments.note.NoteFragment
+import kg.example.noteapp.utils.PreferenceHelper
 
 
 class OnBoardFragment : Fragment() {
@@ -64,8 +66,19 @@ class OnBoardFragment : Fragment() {
                 setCurrentItem(currentItem + 2, true)
             }
         }
+
+        val sharedPreferences = PreferenceHelper()
+        sharedPreferences.unit(requireContext())
         binding.txtStart.setOnClickListener {
             Toast.makeText(context, "App Start", Toast.LENGTH_SHORT).show()
+            sharedPreferences.onBoardShow = true
+            val noteFragment = NoteFragment()
+
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, noteFragment)
+                .commit()
+
+
         }
     }
 }
