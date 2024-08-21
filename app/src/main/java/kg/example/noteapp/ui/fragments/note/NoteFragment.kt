@@ -6,14 +6,22 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import kg.example.noteapp.App
 import kg.example.noteapp.R
 import kg.example.noteapp.databinding.FragmentNoteBinding
+import kg.example.noteapp.ui.adapter.NoteAdapter
 import kg.example.noteapp.utils.PreferenceHelper
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 
 class NoteFragment : Fragment() {
 
     private lateinit var binding: FragmentNoteBinding
+    private val noteAdapter = NoteAdapter()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -25,38 +33,43 @@ class NoteFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        setupListeners()
+        initialize()
+        setupListeners()
+        getData()
         resetCount()
-        txtView()
 
     }
 
-//    private fun setupListeners() {
-//        val sharedPreferences = PreferenceHelper()
-//        sharedPreferences.unit(requireContext())
-//        binding.btnSave.setOnClickListener {
-//            val et = binding.etText.text.toString()
-//            sharedPreferences.text = et
-//            binding.txtSave.text = et
-//        }
-//        binding.txtSave.text = sharedPreferences.text
-//    }
+    private fun initialize() {
+        binding.rvNote.apply {
+            layoutManager = LinearLayoutManager(requireContext())
+            adapter = noteAdapter
+        }
+    }
+
+    private fun setupListeners() {
+        binding.btnAdd.setOnClickListener{
+            findNavController().navigate(R.id.action_noteFragment_to_noteDetailFragment)
+        }
+    }
+
+    private fun getData() {
+        App.appDataBase?.noteDao()?.getAll()?.observe(viewLifecycleOwner){
+            noteAdapter.submitList(it)
+        }
+
+    }
 
     private fun resetCount() {
         val sharedPreferences = PreferenceHelper()
         sharedPreferences.unit(requireContext())
         binding.btmReset.setOnClickListener {
-            Toast.makeText(context, "BOOLEAN IS RESET", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "APP IS RESET", Toast.LENGTH_SHORT).show()
             sharedPreferences.onBoardShow = false
-            binding.txtBool.text = sharedPreferences.onBoardShow.toString()
+            binding.btmReset.text = "App start " + sharedPreferences.onBoardShow.toString()
         }
     }
 
-    private fun txtView() {
-        val sharedPreferences = PreferenceHelper()
-        sharedPreferences.unit(requireContext())
-        binding.txtBool.text = sharedPreferences.onBoardShow.toString()
-    }
 
 
 }

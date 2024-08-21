@@ -5,9 +5,14 @@
     <color name="ripple_color">#C9F9FF</color>
     <color name="orange">#D88B02</color>
     <color name="grey">#8E8B8B</color>
+    <color name="white_2">#E6E6E6</color>
     <color name="grey_light">#C4C4C4</color>
     <color name="grey_middle">#B1B1B1</color>
+    <color name="grey_middle2">#505050</color>
     <color name="transparent">#008E8B8B</color>
     <color name="bg_color">#0E0C0C</color>
+    <color name="grey_dark">#191818</color>
+    <color name="white_milk">#EBE4C9</color>
+    <color name="red_dark">#571818</color>
 
 </resources>
