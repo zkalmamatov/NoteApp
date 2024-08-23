@@ -28,6 +28,7 @@ class NoteFragment : Fragment(), OnClickItem {
     private lateinit var binding: FragmentNoteBinding
     private val noteAdapter = NoteAdapter(this, this)
     private val sharedPreferences = PreferenceHelper()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

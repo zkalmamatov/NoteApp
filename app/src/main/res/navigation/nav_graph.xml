@@ -36,5 +36,10 @@
             android:name="noteId"
             app:argType="integer" />
     </fragment>
+    <fragment
+        android:id="@+id/signUpFragment"
+        android:name="kg.example.noteapp.ui.fragments.signin.SignUpFragment"
+        android:label="fragment_sign_up"
+        tools:layout="@layout/fragment_sign_up" />
 
 </navigation>
