@@ -1,6 +1,7 @@
 package kg.example.noteapp.ui.activity
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -11,7 +12,10 @@ import kg.example.noteapp.R
 import kg.example.noteapp.databinding.ActivityMainBinding
 import kg.example.noteapp.databinding.FragmentOnBoardBinding
 import kg.example.noteapp.ui.adapter.onBoardAdapter
+import kg.example.noteapp.ui.fragments.note.NoteFragment
+import kg.example.noteapp.ui.fragments.signin.SignUpFragment
 import kg.example.noteapp.utils.PreferenceHelper
+import kotlin.math.log
 
 class MainActivity : AppCompatActivity() {
 
@@ -37,10 +41,13 @@ class MainActivity : AppCompatActivity() {
 
         if (sharedPreferences.onBoardShow == false) {
             navController.navigate(R.id.onBoardFragment)
+        } else if (sharedPreferences.auth == false) {
+            navController.navigate(R.id.signUpFragment)
         } else {
             navController.navigate(R.id.noteFragment)
         }
-
     }
+
+
 
 }

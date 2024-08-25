@@ -5,16 +5,19 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.graphics.toColorInt
 import androidx.navigation.fragment.findNavController
 import com.airbnb.lottie.parser.ColorParser
 import kg.example.noteapp.App
 import kg.example.noteapp.R
 import kg.example.noteapp.data.models.NoteModel
 import kg.example.noteapp.databinding.FragmentNoteDetailBinding
+import kg.example.noteapp.ui.adapter.NoteAdapter
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -23,6 +26,7 @@ import java.util.Locale
 class NoteDetailFragment : Fragment() {
 
     private lateinit var binding: FragmentNoteDetailBinding
+    private var noteId: Int = -1
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,12 +38,26 @@ class NoteDetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        updateNote()
         setCurrentDateTime()
         setupListeners()
     }
 
+    private fun updateNote() {
+        arguments?.let {
+            noteId = it.getInt("noteId", -1)
+        }
+        if (noteId != -1) {
+            val argsNote = App.appDataBase?.noteDao()?.getById(noteId)
+            argsNote?.let { model ->
+                binding.etTitle.setText(model.title)
+                binding.etDescription.setText(model.description)
+            }
+        }
+    }
+
     private fun setCurrentDateTime() {
-        val dateFormat = SimpleDateFormat("dd MMMM", Locale.getDefault())
+        val dateFormat = SimpleDateFormat("dd MMMM,", Locale.getDefault())
         val timeFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
 
         val currentDate = dateFormat.format(Date())
@@ -59,7 +77,14 @@ class NoteDetailFragment : Fragment() {
             val date = binding.txtDate2.text.toString()
             val time = binding.txtTime2.text.toString()
 
-            App.appDataBase?.noteDao()?.insertNote(NoteModel(etTitle, etDescription, fragmentColor, date, time))
+            if (noteId != -1) {
+                val updateNote = NoteModel(etTitle, etDescription, "", "", "")
+                updateNote.id = noteId
+                App.appDataBase?.noteDao()?.updateNote(updateNote)
+            } else {
+                App.appDataBase?.noteDao()
+                    ?.insertNote(NoteModel(etTitle, etDescription, fragmentColor, date, time))
+            }
             findNavController().navigateUp()
         }
         binding.btnBack.setOnClickListener {
@@ -69,9 +94,9 @@ class NoteDetailFragment : Fragment() {
 
     private fun getSelectorColor(): Int {
         return when (binding.btnColorGroup.checkedRadioButtonId) {
-            R.id.btn_white -> android.graphics.Color.parseColor("#EBE4C9")
-            R.id.btn_red -> android.graphics.Color.parseColor("#571818")
-            else -> android.graphics.Color.parseColor("#191818")
+            R.id.btn_white -> Color.parseColor("#EBE4C9")
+            R.id.btn_red -> Color.parseColor("#571818")
+            else -> Color.parseColor("#191818")
         }
     }
 }
