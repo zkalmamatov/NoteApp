@@ -75,6 +75,7 @@ class OnBoardFragment : Fragment() {
         binding.txtStart.setOnClickListener {
             Toast.makeText(context, "App Start", Toast.LENGTH_SHORT).show()
             sharedPreferences.onBoardShow = true
+//            findNavController().navigate(R.id.noteFragment)
 
             if (sharedPreferences.auth == false) {
                 findNavController().navigate(R.id.signUpFragment)
