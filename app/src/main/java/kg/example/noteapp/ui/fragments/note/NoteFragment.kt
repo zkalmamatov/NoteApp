@@ -11,12 +11,14 @@ import androidx.appcompat.app.AlertDialog
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.firebase.auth.FirebaseAuth
 import kg.example.noteapp.App
 import kg.example.noteapp.R
 import kg.example.noteapp.data.models.NoteModel
 import kg.example.noteapp.databinding.FragmentNoteBinding
 import kg.example.noteapp.interfaces.OnClickItem
 import kg.example.noteapp.ui.adapter.NoteAdapter
+import kg.example.noteapp.ui.fragments.signin.SignUpFragment
 import kg.example.noteapp.utils.PreferenceHelper
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -28,6 +30,7 @@ class NoteFragment : Fragment(), OnClickItem {
     private lateinit var binding: FragmentNoteBinding
     private val noteAdapter = NoteAdapter(this, this)
     private val sharedPreferences = PreferenceHelper()
+    private val signUpFragment = SignUpFragment()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -63,6 +66,7 @@ class NoteFragment : Fragment(), OnClickItem {
         }
         binding.btnSwap.setOnClickListener {
             tooggleLayout()
+
         }
     }
 
@@ -80,15 +84,35 @@ class NoteFragment : Fragment(), OnClickItem {
         App.appDataBase?.noteDao()?.getAll()?.observe(viewLifecycleOwner) {
             noteAdapter.submitList(it)
         }
-
     }
 
     private fun resetCount() {
-        sharedPreferences.unit(requireContext())
         binding.btmReset.setOnClickListener {
             Toast.makeText(context, "APP IS RESET", Toast.LENGTH_SHORT).show()
+
             sharedPreferences.onBoardShow = false
-            binding.btmReset.text = "App start " + sharedPreferences.onBoardShow.toString()
+            sharedPreferences.auth = false
+            binding.btmReset.text =
+                "Onboard ${sharedPreferences.onBoardShow} Auth ${sharedPreferences.auth}"
+
+            deleteCurrentUser()
+        }
+    }
+
+    private fun deleteCurrentUser() {
+        val user = FirebaseAuth.getInstance().currentUser
+
+        if (user != null) {
+            user.delete().addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    Toast.makeText(context, "Текущий аккаунт удален", Toast.LENGTH_SHORT).show()
+                    sharedPreferences.auth = false
+                } else {
+                    Toast.makeText(context, "Ошибка удаления аккаунта", Toast.LENGTH_SHORT).show()
+                }
+            }
+        } else {
+            Toast.makeText(context, "Аккаунт не найден", Toast.LENGTH_SHORT).show()
         }
     }
 

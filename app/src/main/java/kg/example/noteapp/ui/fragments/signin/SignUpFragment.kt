@@ -17,16 +17,20 @@ import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import kg.example.noteapp.R
 import kg.example.noteapp.databinding.FragmentSignUpBinding
+import kg.example.noteapp.utils.PreferenceHelper
 
 
 class SignUpFragment : Fragment() {
 
+    private val sharedPreferences = PreferenceHelper()
     private lateinit var binding: FragmentSignUpBinding
     private lateinit var auth: FirebaseAuth
     private lateinit var googleSignInClient: GoogleSignInClient
-    private val signInlauncher =
+    private val signInLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 val data: Intent? = result.data
@@ -45,6 +49,7 @@ class SignUpFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentSignUpBinding.inflate(inflater, container, false)
+        auth = Firebase.auth
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.web_client))
             .requestEmail()
@@ -55,12 +60,13 @@ class SignUpFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        sharedPreferences.unit(requireContext())
         setupListeners()
     }
 
     private fun setupListeners() {
         binding.btnSign.setOnClickListener {
-            signInlauncher.launch(googleSignInClient.signInIntent)
+            signInLauncher.launch(googleSignInClient.signInIntent)
         }
     }
 
@@ -79,6 +85,7 @@ class SignUpFragment : Fragment() {
 
     private fun updateUi(user: FirebaseUser?) {
         if (user != null) {
+            sharedPreferences.auth = true
             findNavController().navigate(R.id.noteFragment)
         } else {
             Toast.makeText(requireContext(), "Аутентификация не удалась!", Toast.LENGTH_SHORT)
