@@ -14,16 +14,23 @@ import androidx.recyclerview.widget.RecyclerView
 import kg.example.noteapp.R
 import kg.example.noteapp.data.models.NoteModel
 import kg.example.noteapp.databinding.ItemNoteBinding
+import kg.example.noteapp.interfaces.OnClickItem
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-class NoteAdapter : ListAdapter<NoteModel, NoteAdapter.ViewHolder>(DiffCallback()) {
+class NoteAdapter(
+    private val onLongClick: OnClickItem,
+    private val onClick: OnClickItem
+
+) : ListAdapter<NoteModel, NoteAdapter.ViewHolder>(DiffCallback()) {
+
     class ViewHolder(private val binding: ItemNoteBinding) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: NoteModel) {
             binding.txtTitle.text = item.title
             binding.txtDescription.text = item.description
+
             val bgDraw = ContextCompat.getDrawable(
                 binding.root.context,
                 R.drawable.bg_rounded
@@ -57,6 +64,13 @@ class NoteAdapter : ListAdapter<NoteModel, NoteAdapter.ViewHolder>(DiffCallback(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(getItem(position))
+        holder.itemView.setOnLongClickListener {
+            onLongClick.onLongClick(getItem(position))
+            true
+        }
+        holder.itemView.setOnClickListener {
+            onClick.onClick(getItem(position))
+        }
     }
 
     class DiffCallback : DiffUtil.ItemCallback<NoteModel>() {
@@ -67,8 +81,5 @@ class NoteAdapter : ListAdapter<NoteModel, NoteAdapter.ViewHolder>(DiffCallback(
         override fun areContentsTheSame(oldItem: NoteModel, newItem: NoteModel): Boolean {
             return oldItem == newItem
         }
-
     }
-
-
 }

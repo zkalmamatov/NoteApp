@@ -19,4 +19,12 @@ class PreferenceHelper {
         get() = sharedPreferences.getBoolean("onboard", false)
         set(value) = sharedPreferences.edit().putBoolean("onboard", value).apply()
 
+    var swapLayout: Boolean
+        get() = sharedPreferences.getBoolean("swapLayout", false)
+        set(value) = sharedPreferences.edit().putBoolean("swapLayout", value).apply()
+
+    var auth: Boolean
+        get() = sharedPreferences.getBoolean("auth", false)
+        set(value) = sharedPreferences.edit().putBoolean("auth", value).apply()
+
 }

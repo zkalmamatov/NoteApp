@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
@@ -16,6 +17,7 @@ import kg.example.noteapp.R
 import kg.example.noteapp.databinding.FragmentOnBoardBinding
 import kg.example.noteapp.ui.adapter.onBoardAdapter
 import kg.example.noteapp.ui.fragments.note.NoteFragment
+import kg.example.noteapp.ui.fragments.signin.SignUpFragment
 import kg.example.noteapp.utils.PreferenceHelper
 
 
@@ -69,16 +71,17 @@ class OnBoardFragment : Fragment() {
 
         val sharedPreferences = PreferenceHelper()
         sharedPreferences.unit(requireContext())
+
         binding.txtStart.setOnClickListener {
             Toast.makeText(context, "App Start", Toast.LENGTH_SHORT).show()
             sharedPreferences.onBoardShow = true
-            val noteFragment = NoteFragment()
+//            findNavController().navigate(R.id.noteFragment)
 
-            requireActivity().supportFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, noteFragment)
-                .commit()
-
-
+            if (sharedPreferences.auth == false) {
+                findNavController().navigate(R.id.signUpFragment)
+            } else {
+                findNavController().navigate(R.id.noteFragment)
+            }
         }
     }
 }
