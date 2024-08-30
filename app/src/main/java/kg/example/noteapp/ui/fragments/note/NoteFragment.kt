@@ -8,9 +8,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import kg.example.noteapp.App
 import kg.example.noteapp.R
@@ -30,7 +32,6 @@ class NoteFragment : Fragment(), OnClickItem {
     private lateinit var binding: FragmentNoteBinding
     private val noteAdapter = NoteAdapter(this, this)
     private val sharedPreferences = PreferenceHelper()
-    private val signUpFragment = SignUpFragment()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,7 +47,7 @@ class NoteFragment : Fragment(), OnClickItem {
         initialize()
         setupListeners()
         getData()
-        resetCount()
+        setupDrawer()
     }
 
     private fun initialize() {
@@ -77,7 +78,31 @@ class NoteFragment : Fragment(), OnClickItem {
         } else {
             LinearLayoutManager(requireContext())
         }
+    }
 
+
+    private fun setupDrawer() {
+        val drawerLayout: DrawerLayout = binding.root.findViewById(R.id.drawer_layout)
+        val navigationView: NavigationView = binding.root.findViewById(R.id.menu_drawer)
+        val btnMenu: View = binding.root.findViewById(R.id.btn_menu)
+
+        btnMenu.setOnClickListener {
+            drawerLayout.open()
+        }
+
+        navigationView.setNavigationItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.btm_reset -> {
+                    resetCount()
+                }
+
+                R.id.my_chat -> {
+                    findNavController().navigate(R.id.chatFragment)
+                }
+            }
+            drawerLayout.close()
+            true
+        }
     }
 
     private fun getData() {
@@ -87,16 +112,17 @@ class NoteFragment : Fragment(), OnClickItem {
     }
 
     private fun resetCount() {
-        binding.btmReset.setOnClickListener {
-            Toast.makeText(context, "APP IS RESET", Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, "APP IS RESET", Toast.LENGTH_SHORT).show()
 
-            sharedPreferences.onBoardShow = false
-            sharedPreferences.auth = false
-            binding.btmReset.text =
-                "Onboard ${sharedPreferences.onBoardShow} Auth ${sharedPreferences.auth}"
+        sharedPreferences.onBoardShow = false
+        sharedPreferences.auth = false
 
-            deleteCurrentUser()
-        }
+        val navigationView: NavigationView = binding.root.findViewById(R.id.menu_drawer)
+        val menu = navigationView.menu
+        val resetItem = menu.findItem(R.id.btm_reset)
+        resetItem.title = "Onboard ${sharedPreferences.onBoardShow} Auth ${sharedPreferences.auth}"
+
+        deleteCurrentUser()
     }
 
     private fun deleteCurrentUser() {

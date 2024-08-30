@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_margin="16dp"
     android:id="@+id/my_chat"
     tools:context=".ui.fragments.chat.ChatFragment">
 
@@ -17,6 +18,7 @@
     <EditText
         android:id="@+id/et_message"
         android:layout_width="0dp"
+        android:textColor="@color/white_milk"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/send_btn"
