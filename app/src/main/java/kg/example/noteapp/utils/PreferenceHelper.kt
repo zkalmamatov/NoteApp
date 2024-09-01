@@ -27,4 +27,8 @@ class PreferenceHelper {
         get() = sharedPreferences.getBoolean("auth", false)
         set(value) = sharedPreferences.edit().putBoolean("auth", value).apply()
 
+    var notificationsEnabled: Boolean
+        get() = sharedPreferences.getBoolean("notification_enabled", false)
+        set(value) = sharedPreferences.edit().putBoolean("notifications_enabled", value).apply()
+
 }
